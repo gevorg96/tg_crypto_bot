@@ -53,18 +53,18 @@ func ShowHandler(chatId int64, convert string) string {
     }
 
     go GetUsdConvert(convert, currChan)
-    rub := <-currChan
+    curr := <-currChan
 
-    fmt.Println(rub)
+    fmt.Println(curr)
 
     for i := 0; i < length; i++ {
         cr := <-curseChan
         curse := strings.ReplaceAll(cr.Symbol, "USDT", "")
 
         value := db.Ubalances[chatId][curse]
-        sum += value * cr.Price * rub.Price
+        sum += value * cr.Price * curr.Price
 
-        msg += fmt.Sprintf("%s: %f [%.2f %s]\n", curse, value, cr.Price*rub.Price*value, convert)
+        msg += fmt.Sprintf("%s: %f [%.2f %s]\n", curse, value, cr.Price*curr.Price*value, convert)
     }
     msg += fmt.Sprintf("Total: %.2f %s\n", sum, convert)
 
