@@ -21,15 +21,15 @@ func GetCourseUsd(currency string, curseChan chan BinanceResponse) (jsonResponse
     return
 }
 
-func GetUsdConvert(currency string, rubChan chan BinanceResponse) (err error) {
-    defer close(rubChan)
+func GetUsdConvert(currency string, currChan chan BinanceResponse) (err error) {
+    defer close(currChan)
     jsonResponse, err := makeRequest(fmt.Sprintf("https://api.binance.com/api/v3/ticker/price?symbol=USDT%s", currency))
     if err != nil {
         jsonResponse, err = makeRequest(fmt.Sprintf("https://api.binance.com/api/v3/ticker/price?symbol=%sUSDT", currency))
         jsonResponse.Price = math.Pow(jsonResponse.Price, -1)
     }
 
-    rubChan <- jsonResponse
+    currChan <- jsonResponse
     return
 }
 
